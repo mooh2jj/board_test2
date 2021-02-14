@@ -77,6 +77,7 @@ public class UserController {
 		return "redirect:list";
 	}
 	
+	
 	@RequestMapping("/delete")
 	public String delete(@RequestParam("id") String id) {
 		
