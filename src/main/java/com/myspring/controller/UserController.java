@@ -25,7 +25,7 @@ public class UserController {
 	
 	@RequestMapping("/list")
 	public String selectList(Model model
-			, @RequestParam(value = "searchOption", defaultValue = "id") String searchOption
+			, @RequestParam(value = "searchOption", defaultValue = "") String searchOption
 			, @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 		
 		Map<String, Object> parammap = new HashMap<String, Object>();
