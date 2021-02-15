@@ -4,6 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="usermapper">
+
+	<select id="login" resultType="com.myspring.dto.UserVO">
+		select * from t_member where id= #{id} and pwd=#{pwd}
+	</select>
+
 	<select id="select" resultType="com.myspring.dto.UserVO">
 		select * from t_member
 		<include refid="search"></include>

@@ -12,7 +12,8 @@
 <h1>list</h1>
 
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-	<form align="center" name="form11" method="post" action="/member/list">
+
+	<form align="left" name="form11" method="post" action="/member/list" ">
 		<select name="searchOption">
 			<option value="all" <c:if test="${map.searchOption == 'all'}">selected</c:if>>id+pwd+name</option>
 			<option value="id" <c:if test="${map.searchOption == 'id'}">selected</c:if>>id</option>

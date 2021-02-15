@@ -102,8 +102,8 @@ function isAlphaNumeric(str) {
 </script>
 </head>
 <body>
-<a href="/member/list">list</a>
 <h3>join</h3>
+<a href="/member/home">로그인</a>
 <form name="form" onsubmit="return checkForm();" action="/member/insert" method="post">
 	id :<input type="text" name="id" id="id"/><span id="id-msg" style="color:red; font-size:0.8em;">중복된 아이디입니다.</span><br>
 	pw :<input type="text" name="pwd"/><br>

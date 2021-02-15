@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myspring.dto.UserVO;
 
@@ -23,9 +25,52 @@ public class UserController {
 	@Autowired
 	SqlSession sqlSession;
 	
+	@RequestMapping("/home")
+	public String login() {
+		
+		return "member/home";
+	}
+	
+	@RequestMapping("/login")
+	public String loginCheck(UserVO uvo, HttpServletRequest req, RedirectAttributes rttr, Model model) {
+		
+		System.out.println("post login start...");
+		
+		HttpSession session = req.getSession();
+		
+		UserVO lvo = sqlSession.selectOne("usermapper.login", uvo);
+		
+		if(lvo == null) {
+			System.out.println("로그인 실패");
+//			session.setAttribute("member", null);
+//			rttr.addFlashAttribute("msg", false); 이거 안됨
+			model.addAttribute("msg", "false");
+			return "member/home";
+		}else {
+			System.out.println("로그인 성공");
+			session.setAttribute("id", lvo.getId());
+			session.setAttribute("name", lvo.getName());
+			return "member/list";
+		}
+		
+	}
+	
+	@RequestMapping("/logout")
+	public String logout(HttpServletRequest req, RedirectAttributes rttr, Model model) {
+		
+		System.out.println("post logout...");
+		
+		req.getSession().invalidate();
+		req.getSession(true);
+		// invalidate()로 현재 사용하고 있는 세션을 무효화한다. 그리고 getSession(true)를 통해서 새로운 세션ID를 발급해준다. 이렇게 처리하여 세션을 초기화
+//		rttr.addFlashAttribute("msg", "logout");
+		model.addAttribute("msg", "logout");
+		return "member/home";
+	}
+	
 	@RequestMapping("/list")
 	public String selectList(Model model
-			, @RequestParam(value = "searchOption", defaultValue = "") String searchOption
+			, @RequestParam(value = "searchOption", defaultValue = "all") String searchOption
 			, @RequestParam(value = "keyword", defaultValue = "") String keyword) {
 		
 		Map<String, Object> parammap = new HashMap<String, Object>();
