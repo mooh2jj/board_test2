@@ -16,7 +16,7 @@
 	<!-- id, pw, name, email, joindate -->
 	<insert id="insert">
 		INSERT INTO t_member 
-		VALUES (#{id}, #{pwd}, #{name}, #{email}, sysdate)
+		VALUES (#{id}, #{pwd}, #{name}, #{email}, sysdate, #{fileName})
 	</insert>
 	
 	<select id="view" resultType="com.myspring.dto.UserVO">

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>   
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>          
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,6 +44,9 @@
 	pw :<input type="text" name="pwd" value="${viewOne.pwd}"/><br>
 	name :<input type="text" name="name" value="${viewOne.name}"/><br>
 	email :<input type="text" name="email" value="${viewOne.email}"/><br>
+	<c:if test="${viewOne.fileName != null}">
+	file :<a href="/file/fileDownload?fileName=${viewOne.fileName}">${viewOne.fileName}</a><br>
+	</c:if>
 	<button id="modify" type="button">modify</button>
 	<button id="delete" type="button">delete</button>
 </form>

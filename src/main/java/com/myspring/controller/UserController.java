@@ -1,12 +1,16 @@
 package com.myspring.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myspring.dto.UserVO;
@@ -32,7 +37,7 @@ public class UserController {
 	}
 	
 	@RequestMapping("/login")
-	public String loginCheck(UserVO uvo, HttpServletRequest req, RedirectAttributes rttr, Model model) {
+	public String login(UserVO uvo, HttpServletRequest req, RedirectAttributes rttr, Model model) {
 		
 		System.out.println("post login start...");
 		
@@ -94,8 +99,21 @@ public class UserController {
 	}
 	
 	@RequestMapping("/insert")
-	public String insert(UserVO uvo) {
+	public String insert(UserVO uvo) throws IOException {
 		
+		System.out.println("before insert uvo: "+uvo);
+		String fileName = null;
+		MultipartFile uploadFile = uvo.getUploadFile();
+		if(!uploadFile.isEmpty()) {
+			String originalFileName = uploadFile.getOriginalFilename();
+			String ext = FilenameUtils.getExtension(originalFileName);	// 확장자 구하기
+			UUID uuid = UUID.randomUUID();	// UUID 구하기
+			fileName = uuid+"."+ext;
+			uploadFile.transferTo(new File("I:\\upload\\"+fileName));
+		}
+		System.out.println("fileName: "+fileName);
+		uvo.setFileName(fileName);
+		System.out.println("after insert uvo: "+uvo);
 		sqlSession.insert("usermapper.insert", uvo);
 		
 		return "redirect:list";
@@ -132,6 +150,7 @@ public class UserController {
 		return "redirect:list";
 	}
 	
+	// id 중복체크
 	@ResponseBody
 	@RequestMapping("/idcheck")
 	public String idcheck(HttpServletRequest request) {

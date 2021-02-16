@@ -32,6 +32,7 @@
 		<th>pwd</th>
 		<th>name</th>
 		<th>email</th>
+		<th>file</th>
 		<th>joinDate</th>
 	</tr>
 	</thead>
@@ -42,6 +43,7 @@
 			<td>${uvo.pwd}</td>
 			<td><a href="/member/view?id=${uvo.id}">${uvo.name}</a></td>
 			<td>${uvo.email}</td>
+			<td>${uvo.fileName}</td>
 			<td><fmt:formatDate value="${uvo.joindate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 		</tr>
 	</c:forEach>
