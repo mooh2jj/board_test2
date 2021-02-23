@@ -2,28 +2,47 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
+
 <mapper namespace="usermapper">
+
+	<!-- countUser -->
+	<!-- 페이징 sql -->
+	<sql id="pagingHeader">
+		SELECT * FROM(
+		SELECT ROWNUM AS rn, A.* FROM (
+	</sql>
+
+	<sql id="pagingFooter">
+			) A
+		) WHERE rn BETWEEN #{start} AND #{end}
+	</sql>
+
+	<select id="countUser" resultType="int">
+		SELECT COUNT(*) FROM t_member
+	</select>
 
 	<select id="login" resultType="com.myspring.dto.UserVO">
 		select * from t_member where id= #{id} and pwd=#{pwd}
 	</select>
 
 	<select id="select" resultType="com.myspring.dto.UserVO">
+		<include refid="pagingHeader"></include>
 		select * from t_member
 		<include refid="search"></include>
-	</select>	
+		order by joindate desc
+		<include refid="pagingFooter"></include>
+	</select>
 	<!-- id, pw, name, email, joindate -->
 	<insert id="insert">
-		INSERT INTO t_member 
+		INSERT INTO t_member
 		VALUES (#{id}, #{pwd}, #{name}, #{email}, sysdate, #{fileName})
 	</insert>
-	
+
 	<select id="view" resultType="com.myspring.dto.UserVO">
 		select * from T_member
 		where id = #{id}
 	</select>
-	
+
 	<update id="modify">
 		update t_member set
 		pwd=#{pwd},
@@ -31,33 +50,33 @@
 		email=#{email}
 		where id=#{id}
 	</update>
-	
+
 	<delete id="delete">
 		delete from t_member
 		where id = #{id}
 	</delete>
-	
+
 	<select id="idcheck" resultType="int">
 		select count(*) from T_member
 		where id = #{id}
 	</select>
-	
+
 	<sql id="search">
-           <choose>
-                <!-- 전체 검색인 경우 -->
-                <when test="searchOption == 'all'">
-                     WHERE 1 = 1
-                     AND
-                           (id like '%'||#{keyword}||'%'
-                           OR pwd like '%'||#{keyword}||'%'
-                           OR  name like '%'||#{keyword}||'%')           
-                </when>
-                
-                <!-- 전체 검색이 아닌경우 -->
-                <otherwise>
-                     WHERE 1 = 1
-                     AND ${searchOption} like '%'||#{keyword}||'%'
-                </otherwise>
-           </choose>
-     </sql>
+		<choose>
+			<!-- 전체 검색인 경우 -->
+			<when test="searchOption == 'all'">
+				WHERE 1 = 1
+				AND
+				(id like '%'||#{keyword}||'%'
+				OR pwd like '%'||#{keyword}||'%'
+				OR name like '%'||#{keyword}||'%')
+			</when>
+
+			<!-- 전체 검색이 아닌경우 -->
+			<otherwise>
+				WHERE 1 = 1
+				AND ${searchOption} like '%'||#{keyword}||'%'
+			</otherwise>
+		</choose>
+	</sql>
 </mapper>  
