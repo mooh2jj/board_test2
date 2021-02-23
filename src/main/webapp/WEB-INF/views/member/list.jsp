@@ -55,7 +55,8 @@
 			<th>name</th>
 			<th>email</th>
 			<th width="30%">file</th>
-			<th>joinDate</th>
+			<th>joindate</th>
+			<th>modifydate</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -67,6 +68,7 @@
 				<td>${uvo.email}</td>
 				<td>${uvo.fileName}</td>
 				<td><fmt:formatDate value="${uvo.joindate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+				<td><fmt:formatDate value="${uvo.modifydate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 			</tr>
 		</c:forEach>
 		</tbody>

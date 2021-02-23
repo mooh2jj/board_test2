@@ -27,15 +27,17 @@
 
 	<select id="select" resultType="com.myspring.dto.UserVO">
 		<include refid="pagingHeader"></include>
-		select * from t_member
+		select 
+			*
+		from t_member
 		<include refid="search"></include>
 		order by joindate desc
 		<include refid="pagingFooter"></include>
 	</select>
-	<!-- id, pw, name, email, joindate -->
+	<!-- id, pw, name, email, joindate, filename, modify -->
 	<insert id="insert">
 		INSERT INTO t_member
-		VALUES (#{id}, #{pwd}, #{name}, #{email}, sysdate, #{fileName})
+		VALUES (#{id}, #{pwd}, #{name}, #{email}, sysdate, #{fileName}, null)
 	</insert>
 
 	<select id="view" resultType="com.myspring.dto.UserVO">
@@ -47,7 +49,8 @@
 		update t_member set
 		pwd=#{pwd},
 		name=#{name},
-		email=#{email}
+		email=#{email},
+		modifydate=sysdate
 		where id=#{id}
 	</update>
 

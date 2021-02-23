@@ -16,67 +16,110 @@ public class UserVO {
 	private MultipartFile uploadFile;
 	
 	private Date joindate;
+	private Date modifydate;
+
+
 
 	public String getId() {
 		return id;
 	}
 
+
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
+
 
 	public String getPwd() {
 		return pwd;
 	}
 
+
+
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
 	}
+
+
 
 	public String getName() {
 		return name;
 	}
 
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
 
 	public String getEmail() {
 		return email;
 	}
 
+
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+
 
 	public String getFileName() {
 		return fileName;
 	}
 
+
+
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+
+
 
 	public MultipartFile getUploadFile() {
 		return uploadFile;
 	}
 
+
+
 	public void setUploadFile(MultipartFile uploadFile) {
 		this.uploadFile = uploadFile;
 	}
+
+
 
 	public Date getJoindate() {
 		return joindate;
 	}
 
+
+
 	public void setJoindate(Date joindate) {
 		this.joindate = joindate;
 	}
 
+
+
+	public Date getModifydate() {
+		return modifydate;
+	}
+
+
+
+	public void setModifydate(Date modifydate) {
+		this.modifydate = modifydate;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "UserVO [id=" + id + ", pwd=" + pwd + ", name=" + name + ", email=" + email + ", fileName=" + fileName
-				+ ", uploadFile=" + uploadFile + ", joindate=" + joindate + "]";
+				+ ", uploadFile=" + uploadFile + ", joindate=" + joindate + ", modifydate=" + modifydate + "]";
 	}
 
 	
