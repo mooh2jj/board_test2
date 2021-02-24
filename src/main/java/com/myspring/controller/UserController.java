@@ -29,7 +29,7 @@ import com.myspring.dto.UserVO;
 @Controller
 @RequestMapping("/member/*")
 public class UserController {
-
+	// log -> info 추가 log4j.xml 내  Apllication Loggers에서 class 범위 설정됨
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
