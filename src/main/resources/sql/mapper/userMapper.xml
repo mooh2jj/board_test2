@@ -22,7 +22,8 @@
 	</select>
 
 	<select id="login" resultType="com.myspring.dto.UserVO">
-		select * from t_member where id= #{id} and pwd=#{pwd}
+		select * from t_member 
+		where id= #{id} and pwd=#{pwd}
 	</select>
 
 	<select id="select" resultType="com.myspring.dto.UserVO">

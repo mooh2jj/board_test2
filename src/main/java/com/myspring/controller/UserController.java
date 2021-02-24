@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,8 @@ import com.myspring.dto.UserVO;
 @RequestMapping("/member/*")
 public class UserController {
 
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	SqlSession sqlSession;
 
@@ -41,9 +45,14 @@ public class UserController {
 	public String login(UserVO uvo, HttpServletRequest req, RedirectAttributes rttr, Model model) {
 
 		System.out.println("post login start...");
-
+		
 		HttpSession session = req.getSession();
 
+		// 기존 "login" 세션 값 있으면 제거!
+		if( session.getAttribute("login") != null) {
+			session.removeAttribute("login");	
+		}
+		
 		UserVO lvo = sqlSession.selectOne("usermapper.login", uvo);
 
 		if (lvo == null) {
@@ -51,12 +60,13 @@ public class UserController {
 //			session.setAttribute("member", null);
 //			rttr.addFlashAttribute("msg", false); 이거 안됨
 			model.addAttribute("msg", "false");
-			return "member/home";
+			return "member/home";	// 로그인실패시
 		} else {
 			System.out.println("로그인 성공");
-			session.setAttribute("id", lvo.getId());
-			session.setAttribute("name", lvo.getName());
-			return "member/list";
+//			session.setAttribute("id", lvo.getId());
+//			session.setAttribute("name", lvo.getName());
+			session.setAttribute("login", lvo);
+			return "member/list";	// 로그인성공시
 		}
 
 	}
@@ -113,10 +123,10 @@ public class UserController {
 		List<UserVO> selectAll = sqlSession.selectList("usermapper.select", parammap);
 		
 		model.addAttribute("paging", pvo);
-		System.out.println("pvo : "+pvo);
+		log.info("pvo : "+pvo);
 		
 		model.addAttribute("selectAll", selectAll);
-		System.out.println("selectAll: " + selectAll);
+		log.info("selectAll: " + selectAll);
 
 
 		return "member/list";
