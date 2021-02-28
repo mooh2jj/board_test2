@@ -67,7 +67,8 @@ public class UserController {
 //			session.setAttribute("id", lvo.getId());
 //			session.setAttribute("name", lvo.getName());
 			session.setAttribute("login", lvo);
-			return "member/list";	// 로그인성공시
+//			return "member/list";	// 로그인성공시
+			return "board/list";	// 로그인성공시
 		}
 
 	}

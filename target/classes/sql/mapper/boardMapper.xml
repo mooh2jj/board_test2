@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="boardmapper">
+	
+	<select id = "selectAll" resultType="com.myspring.dto.BoardDto">
+	
+		<include refid="pagingHeader"></include>
+		select 
+			rownum,
+			bno, 
+			title, 
+			content, 
+			writer, 
+			regdate, 
+			viewcnt,
+			<!-- 댓글숫자 표시 recnt:게시글의 댓글수-->
+			(SELECT COUNT(*) FROM tbl_reply where BNO=b.bno) AS recnt
+		from TBL_BOARD b
+		<include refid="search"></include>
+		order by 
+			bno desc,
+			regdate desc
+		<include refid="pagingFooter"></include>	
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TBL_BOARD (bno, title, content, writer) 
+		VALUES (
+			(SELECT NVL(MAX(bno)+1, 1)FROM TBL_BOARD), #{title}, #{content}, #{writer})
+	</insert>
+	
+	<select id="selectView" resultType = "com.myspring.dto.BoardDto">
+		select bno, title, content, writer, regdate, viewcnt from TBL_BOARD
+		where 1=1
+		and bno = #{bno}
+	</select>
+	
+	<update id="increaseViewcnt">
+		UPDATE TBL_BOARD 
+		SET viewcnt = viewcnt + 1 
+		WHERE bno = #{bno}
+	</update>
+	
+	<update id="update">
+		UPDATE TBL_BOARD SET 
+		title = #{title},
+		content = #{content}
+		where bno = #{bno}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM TBL_BOARD 
+		WHERE bno = #{bno}
+	</delete>
+	
+	<!-- 페이징 sql -->
+	
+	<select id="countBoard" resultType="int">
+		SELECT COUNT(*) FROM TBL_BOARD
+	</select>
+	
+	<sql id="pagingHeader">
+		SELECT * FROM(
+			SELECT ROWNUM AS rn, A.* FROM (
+	</sql>
+	
+		<sql id="pagingFooter">
+			) A
+		) WHERE rn BETWEEN #{start} AND #{end}
+	</sql>
+	
+	<!-- 검색 조회 -->
+	<sql id="search">
+		<choose>
+			<when test="searchOption == 'all'">
+				WHERE 1=1
+				AND
+					(writer like '%'||#{keyword}||'%'
+					OR content like '%'||#{keyword}||'%'
+					OR title like '%'||#{keyword}||'%')		
+			</when>
+			
+			<!-- 전체 검색이 아닌경우 -->
+			<otherwise>
+				WHERE 1=1
+				AND ${searchOption} like '%'||#{keyword}||'%'
+			</otherwise>
+		</choose>
+	</sql>
+</mapper>

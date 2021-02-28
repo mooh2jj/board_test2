@@ -23,22 +23,6 @@ public class AuthLoginInterceptor extends HandlerInterceptorAdapter{
 		
 		Object obj = session.getAttribute("login");
 		
-//		//exclude-mapping 대신, 요청된 url
-//		String requestUrl = request.getRequestURL().toString();
-//		
-//		//하단의 Url 체크를 통해, login 페이지는 예외처리를 해줘야 무한 리디렉션에서 벗어날 수 있다
-//		if(requestUrl.contains("/member/login")){
-//			return true;
-//		}
-//		if(requestUrl.contains("/member/join")){
-//			return true;
-//		}
-//		if(requestUrl.contains("/member/insert")){
-//			return true;
-//		}
-//		if(requestUrl.contains("/member/idcheck")){
-//			return true;
-//		}
 		//세션 체크
 		if( obj == null ) {
 			// 로그인이 안되어 있는 상태임으로 로그인 폼으로 다시 돌려보냄(redirect)

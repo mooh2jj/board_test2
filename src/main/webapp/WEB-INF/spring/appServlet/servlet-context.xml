@@ -52,7 +52,7 @@
 	<!-- 인터셉터 설정 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/member/list" />
+			<mvc:mapping path="/*/list" />
 			<beans:bean class="com.myspring.interceptor.AuthLoginInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
