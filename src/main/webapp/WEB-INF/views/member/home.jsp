@@ -34,6 +34,9 @@
 		pw :<input type="text" name="pwd"/><br>
 		<button id="loginBtn" onclick="login();">로그인</button>
 	</form>
+	<c:if test="${msg == 'join' }">
+		<p style="color:red;">회원가입이 완료되었습니다. 로그인을 시도해주세요!</p>
+	</c:if>
 	<c:if test="${msg == 'false' }">
 		<p style="color:red;">로그인 실패! id와 pwd를 확인해주세요.</p>
 	</c:if>

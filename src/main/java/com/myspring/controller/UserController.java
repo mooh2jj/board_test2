@@ -58,9 +58,10 @@ public class UserController {
 		if (lvo == null) {
 			System.out.println("로그인 실패");
 //			session.setAttribute("member", null);
-//			rttr.addFlashAttribute("msg", false); 이거 안됨
+//			rttr.addFlashAttribute("msg", false); // 이거 안됨
 			model.addAttribute("msg", "false");
 			return "member/home";	// 로그인실패시
+//			return "redirect:home";	// 로그인실패시			
 		} else {
 			System.out.println("로그인 성공");
 //			session.setAttribute("id", lvo.getId());
@@ -80,9 +81,9 @@ public class UserController {
 		req.getSession(true);
 		// invalidate()로 현재 사용하고 있는 세션을 무효화한다. 그리고 getSession(true)를 통해서 새로운 세션ID를
 		// 발급해준다. 이렇게 처리하여 세션을 초기화
-//		rttr.addFlashAttribute("msg", "logout");
-		model.addAttribute("msg", "logout");
-		return "member/home";
+		rttr.addFlashAttribute("msg", "logout");	// 이건 됨.
+//		model.addAttribute("msg", "logout");
+		return "redirect:home";
 	}
 
 	@RequestMapping("/list")
@@ -139,7 +140,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/insert")
-	public String insert(UserVO uvo) throws IOException {
+	public String insert(UserVO uvo, RedirectAttributes rttr, Model model) throws IOException {
 
 		System.out.println("before insert uvo: " + uvo);
 		String fileName = null;
@@ -156,7 +157,10 @@ public class UserController {
 		System.out.println("after insert uvo: " + uvo);
 		sqlSession.insert("usermapper.insert", uvo);
 
-		return "redirect:list";
+//		model.addAttribute("msg", "join");
+		rttr.addFlashAttribute("msg", "join");		// 이건 됨.
+		
+		return "redirect:home";
 	}
 
 	@RequestMapping("/view")
