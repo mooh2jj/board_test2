@@ -29,7 +29,8 @@ function selChange() {
 	<form align="center" name="form11" method="post" action="${contextPath}/board/list.do">
 		<select name="searchOption">
 			<option value="all" <c:if test="${map.searchOption == 'all'}">selected</c:if>>제목+이름+내용</option>
-			<option value="writer" <c:if test="${map.searchOption == 'writer'}">selected</c:if>>이름</option>
+			<%-- <option value="writer" <c:if test="${map.searchOption == 'writer'}">selected</c:if>>이름</option> --%>
+			<option value="userName" <c:if test="${map.searchOption == 'userName'}">selected</c:if>>이름</option>
 			<option value="content" <c:if test="${map.searchOption == 'content'}">selected</c:if>>내용</option>
 			<option value="title" <c:if test="${map.searchOption == 'title'}">selected</c:if>>제목</option>
 		</select>
@@ -71,7 +72,8 @@ function selChange() {
 					</c:if>
 				</a>
 			</td>
-			<td>${row.writer}</td>
+			<%-- <td>${row.writer}</td> --%>
+			<td>${row.userName}</td>
 			<td><fmt:formatDate value="${row.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 			<td>${row.viewcnt}</td>
 		</tr>

@@ -16,9 +16,10 @@
 			writer, 
 			regdate, 
 			viewcnt,
+			name AS userName,
 			<!-- 댓글숫자 표시 recnt:게시글의 댓글수-->
 			(SELECT COUNT(*) FROM tbl_reply where BNO=b.bno) AS recnt
-		from TBL_BOARD b
+		from TBL_BOARD b, t_member m
 		<include refid="search"></include>
 		order by 
 			bno desc,
@@ -76,16 +77,16 @@
 	<sql id="search">
 		<choose>
 			<when test="searchOption == 'all'">
-				WHERE 1=1
+				WHERE b.writer = m.id
 				AND
-					(writer like '%'||#{keyword}||'%'
+					(name like '%'||#{keyword}||'%'
 					OR content like '%'||#{keyword}||'%'
 					OR title like '%'||#{keyword}||'%')		
 			</when>
 			
 			<!-- 전체 검색이 아닌경우 -->
 			<otherwise>
-				WHERE 1=1
+				WHERE b.writer = m.id
 				AND ${searchOption} like '%'||#{keyword}||'%'
 			</otherwise>
 		</choose>

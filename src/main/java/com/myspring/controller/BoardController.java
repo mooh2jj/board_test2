@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,8 +88,12 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/insert.do")
-	public String insert(BoardDto dto) {
+	public String insert(BoardDto dto, HttpSession session) {
+//		public String insert(BoardDto dto) {
 		
+		String writer = (String) session.getAttribute("id");
+		System.out.println("id: "+writer );
+		dto.setWriter(writer);
 		sqlSession.insert("boardmapper.insert", dto);
 		
 		return "redirect:list.do";

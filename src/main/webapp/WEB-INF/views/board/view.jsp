@@ -19,7 +19,11 @@
 			
 			var replytext = $('#replytext').val();
 			var bno = "${selectViewOne.bno}";
-			var param = "replytext="+replytext+"&bno="+bno;
+			// json 데이터로 서버에 보내기
+			var param = {
+					"replytext" : replytext,
+					"bno" : bno
+			}
 			
 			$.ajax({
 				type: "post",
@@ -57,9 +61,9 @@
 		
 		$.ajax({
 			type: "get",
+			url: "${contextPath}/reply/listJson?bno=${selectViewOne.bno}",
 			contentType: "application/json; charset=utf-8", // ==> 생략가능(RestController이기때문에 가능)
 			dataType: "json",
-			url: "${contextPath}/reply/listJson?bno=${selectViewOne.bno}",
 			success: function (result) {
 				console.log(result);
 				/* alert(result); */
@@ -117,7 +121,8 @@
 			</div>
 			<div>
 				작성자
-				<input name="writer" id="writer" value="${selectViewOne.writer}" readonly="readonly">
+				<%-- <input name="writer" id="writer" value="${selectViewOne.writer}" readonly="readonly"> --%>
+				${selectViewOne.writer}
 			</div>
 			<div> 
 			<input type="hidden" name="bno" value="${selectViewOne.bno}">

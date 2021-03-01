@@ -70,5 +70,7 @@ public class BoardDto {
 				+ ", userName=" + userName + ", regdate=" + regdate + ", viewcnt=" + viewcnt + ", recnt=" + recnt + "]";
 	}
 	
+	
+	
 }
 

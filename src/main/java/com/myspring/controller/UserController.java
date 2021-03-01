@@ -64,7 +64,7 @@ public class UserController {
 //			return "redirect:home";	// 로그인실패시			
 		} else {
 			System.out.println("로그인 성공");
-//			session.setAttribute("id", lvo.getId());
+			session.setAttribute("id", lvo.getId());
 //			session.setAttribute("name", lvo.getName());
 			session.setAttribute("login", lvo);
 //			return "member/list";	// 로그인성공시

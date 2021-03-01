@@ -16,7 +16,7 @@
 			// 절차적으로 잘 적었는지 체크!
 			var title = $('#title').val();
 			var content = $('#content').val();
-			var writer = $('#writer').val();
+			/* var writer = $('#writer').val(); */
 			
 			if(title == "" || title.length == 0){
 				alert("제목을 입력하세요");
@@ -29,12 +29,12 @@
 				document.form1.content.focus();	// 안쓴거 해당입력창에 포커스! 
 				return;
 			}
-			
+			/* 
 			if(writer == "" || writer.length == 0){
 				alert("이름을 입력하세요");
 				document.form1.writer.focus();	// 안쓴거 해당입력창에 포커스!
 				return;
-			}
+			} */
 			
 			document.form1.submit();
 		});
@@ -55,10 +55,10 @@
 			내용
 			<textarea name="content" id="content" rows="4" cols="80" placeholder="내용을 입력해주세요"></textarea>
 		</div>
-		<div>
+<!-- 		<div>
 			글쓴이 
 			<input name="writer" id="writer" size="80" placeholder="이름을 입력해주세요" />
-		</div>
+		</div> -->
 		<div>
 			<button type="button" id="btnSave">확인</button>
 			<button type="reset" id="btnCancle">취소</button>

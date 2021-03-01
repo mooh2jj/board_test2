@@ -1,0 +1,46 @@
+.header_class1{
+	background-color: orange;
+	
+}
+
+.footer_class1{
+	background-color: teal;
+	height: 100px;
+}
+
+.form1{
+	margin: 0 auto;
+	width: 300px;
+}
+
+.login_table{
+	/* border= "3px" bgcolor ="green" */
+	border: 3px solid black; 
+	background-color: green;
+}
+
+/* td{
+	border: 1px solid black;
+} */
+.regi_table{
+	/* border= "3px" bgcolor ="green" */
+	border: 3px solid black; 
+	background-color: green;
+	/* align:"center"; *//* 적용안됨 */
+}
+
+h1{
+	font-size: 1.8em;
+}
+
+.id-msg1{
+	color:blue;
+	display:none;
+}
+
+.id-msg2{
+	color:red;
+	display:none;
+}
+
+
