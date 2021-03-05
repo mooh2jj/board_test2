@@ -1,5 +1,6 @@
 package com.myspring.controller;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,10 +15,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myspring.dto.BoardDto;
 import com.myspring.dto.PagingVO;
@@ -38,7 +42,7 @@ public class BoardController {
 	
 	@RequestMapping("/list")
 	public String list(PagingVO pvo, Model model
-			, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="nowPage", required=false, defaultValue = "1")String nowPage
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage
 			, @RequestParam(value = "searchOption", defaultValue = "title") String searchOption
 			, @RequestParam(value = "keyword", defaultValue = "") String keyword
@@ -87,8 +91,9 @@ public class BoardController {
 		return "board/write";
 	}
 	
+	@Transactional
 	@RequestMapping("/insert.do")
-	public String insert(BoardDto dto, HttpSession session) {
+	public String insert(BoardDto dto, HttpSession session) throws Exception {
 //		public String insert(BoardDto dto) {
 		
 		String writer = (String) session.getAttribute("id");
@@ -96,9 +101,23 @@ public class BoardController {
 		dto.setWriter(writer);
 		sqlSession.insert("boardmapper.insert", dto);
 		
+		String[] files = dto.getFiles(); // 첨부파일 배열
+		if(files != null) { // 첨부파일이 없으면 메서드 종료
+		// 첨부파일들의 정보를 tbl_attach 테이블에 insert
+			for(String name : files){ 
+		    	sqlSession.insert("boardmapper.addAttach", name);
+			}
+		}
+		
 		return "redirect:list.do";
 	}
 
+	@RequestMapping("/getAttach/{bno}")
+	@ResponseBody
+	public List<String> getAttach(@PathVariable("bno") int bno) {
+	    return sqlSession.selectList("boardmapper.getAttach", bno);
+	}
+	
 	
 	@RequestMapping("/view.do")
 	public String view(Model model, @RequestParam("bno") int bno) {
@@ -133,6 +152,11 @@ public class BoardController {
 		return "redirect:list.do";
 	}
 	
+	@RequestMapping("/deleteFile.do")
+	public void deleteFile(String fullname) throws Exception {
+		// TODO Auto-generated method stub
+		sqlSession.delete("boardmapper.deleteFile", fullname);
+	}
 	
 	
 }

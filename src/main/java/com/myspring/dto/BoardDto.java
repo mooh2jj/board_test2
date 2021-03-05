@@ -1,5 +1,6 @@
 package com.myspring.dto;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class BoardDto {
@@ -14,8 +15,16 @@ public class BoardDto {
 	
 	private int recnt;			// **게시글 댓글(Reply)의 수 추가
 	
+	private String[] files;		// 첨부파일
+	
 	public int getBno() {
 		return bno;
+	}
+	public String[] getFiles() {
+		return files;
+	}
+	public void setFiles(String[] files) {
+		this.files = files;
 	}
 	public void setBno(int bno) {
 		this.bno = bno;
@@ -67,7 +76,8 @@ public class BoardDto {
 	@Override
 	public String toString() {
 		return "BoardDto [bno=" + bno + ", title=" + title + ", content=" + content + ", writer=" + writer
-				+ ", userName=" + userName + ", regdate=" + regdate + ", viewcnt=" + viewcnt + ", recnt=" + recnt + "]";
+				+ ", userName=" + userName + ", regdate=" + regdate + ", viewcnt=" + viewcnt + ", recnt=" + recnt
+				+ ", files=" + Arrays.toString(files) + "]";
 	}
 	
 	

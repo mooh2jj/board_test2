@@ -103,6 +103,7 @@ function isAlphaNumeric(str) {
 </head>
 <body>
 <h3>join</h3>
+<a href="/board/list">게시판</a>
 <a href="/member/home">로그인</a>
 <form name="form" onsubmit="return checkForm();" action="/member/insert" method="post" enctype="multipart/form-data">
 	id :<input type="text" name="id" id="id"/><span id="id-msg" style="color:red; font-size:0.8em;">중복된 아이디입니다.</span><br>
