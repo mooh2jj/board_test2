@@ -34,7 +34,7 @@
 		INSERT INTO tbl_board (
 		bno, title, content, writer
 		) VALUES (
-		(select NVL(MAX(bno)+1, 1) from tbl_board)), #{title}, #{content}, #{writer}
+		(select NVL(MAX(bno)+1, 1) from tbl_board), #{title}, #{content}, #{writer}
 		)
 	</insert>
 

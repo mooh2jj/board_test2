@@ -26,11 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.myspring.dto.BoardDto;
 import com.myspring.dto.PagingVO;
 
-
-
-/**
- * Handles requests for the application home page.
- */
 @Controller
 @RequestMapping("/board/*") // */board/* 앞에 * 빼야!
 public class BoardController {
@@ -95,19 +90,20 @@ public class BoardController {
 	@RequestMapping("/insert.do")
 	public String insert(BoardDto dto, HttpSession session) throws Exception {
 //		public String insert(BoardDto dto) {
+		System.out.println("dto: "+dto);
 		
 		String writer = (String) session.getAttribute("id");
 		System.out.println("id: "+writer );
 		dto.setWriter(writer);
 		sqlSession.insert("boardmapper.insert", dto);
 		
-		String[] files = dto.getFiles(); // 첨부파일 배열
-		if(files != null) { // 첨부파일이 없으면 메서드 종료
-		// 첨부파일들의 정보를 tbl_attach 테이블에 insert
-			for(String name : files){ 
-		    	sqlSession.insert("boardmapper.addAttach", name);
-			}
-		}
+//		String[] files = dto.getFiles(); // 첨부파일 배열
+//		if(files != null) { // 첨부파일이 없으면 메서드 종료
+//		// 첨부파일들의 정보를 tbl_attach 테이블에 insert
+//			for(String name : files){ 
+//		    	sqlSession.insert("boardmapper.addAttach", name);
+//			}
+//		}
 		
 		return "redirect:list.do";
 	}
