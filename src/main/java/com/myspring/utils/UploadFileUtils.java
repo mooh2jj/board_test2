@@ -16,7 +16,7 @@ public class UploadFileUtils {
 
 	public static String uploadFile(String uploadPath, String originalName, byte[] fileData) throws Exception{
 		
-		UUID uuid = UUID.randomUUID();		// ���� ���� �ĺ���, universally unique identifier
+		UUID uuid = UUID.randomUUID();		// 범용고유 식별자, universally unique identifier
 		
 		String savedName = uuid.toString()+"_"+originalName;
 		

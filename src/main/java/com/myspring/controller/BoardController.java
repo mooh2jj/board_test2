@@ -1,16 +1,23 @@
 package com.myspring.controller;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -154,5 +160,108 @@ public class BoardController {
 		sqlSession.delete("boardmapper.deleteFile", fullname);
 	}
 	
+	@RequestMapping("/excelDown.do")
+	public void excelDown(HttpServletResponse response) throws Exception{
+		
+		List<BoardDto> excelList = sqlSession.selectList("selectAll2");
+		
+		Workbook wb = new HSSFWorkbook();
+		Sheet sheet = wb.createSheet("게시판");
+
+	    Row row = null;
+	    Cell cell = null;
+	    int rowNo = 0;
+
+	    // 테이블 헤더용 스타일
+	    CellStyle headStyle = wb.createCellStyle();
+	    
+	    // 가는 경계선을 가집니다.
+	    headStyle.setBorderTop(BorderStyle.THIN);
+	    headStyle.setBorderBottom(BorderStyle.THIN);
+	    headStyle.setBorderLeft(BorderStyle.THIN);
+	    headStyle.setBorderRight(BorderStyle.THIN);
+	    
+	    // 배경색은 노란색입니다.
+	    headStyle.setFillForegroundColor(HSSFColorPredefined.YELLOW.getIndex());
+	    headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+	    // 데이터는 가운데 정렬합니다.
+	    headStyle.setAlignment(HorizontalAlignment.CENTER);
+
+	    // 데이터용 경계 스타일 테두리만 지정
+	    CellStyle bodyStyle = wb.createCellStyle();
+	    bodyStyle.setBorderTop(BorderStyle.THIN);
+	    bodyStyle.setBorderBottom(BorderStyle.THIN);
+	    bodyStyle.setBorderLeft(BorderStyle.THIN);
+	    bodyStyle.setBorderRight(BorderStyle.THIN);
+
+	    // 헤더 생성
+	    row = sheet.createRow(rowNo++);
+	    
+	    cell = row.createCell(0);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("번호");
+	    
+	    cell = row.createCell(1);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("제목");
+	    
+	    cell = row.createCell(2);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("내용");
+	    
+	    cell = row.createCell(3);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("작성자");
+
+	    cell = row.createCell(4);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("작성일");
+	    
+	    cell = row.createCell(5);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("조회수");
+	    
+	    // 데이터 부분 생성
+
+	    for(BoardDto dto : excelList) {
+
+	        row = sheet.createRow(rowNo++);
+
+	        cell = row.createCell(0);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(dto.getBno());
+
+	        cell = row.createCell(1);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(dto.getTitle());
+	        
+	        cell = row.createCell(2);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(dto.getContent());
+
+	        cell = row.createCell(3);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(dto.getWriter());
+	        
+	        cell = row.createCell(4);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(dto.getRegdate());
+	        
+	        cell = row.createCell(5);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(dto.getViewcnt());
+
+	    }
+
+	    // 컨텐츠 타입과 파일명 지정
+	    response.setContentType("ms-vnd/excel");
+	    response.setHeader("Content-Disposition", "attachment;filename=board_excelDown.xls");
+
+	    // 엑셀 출력
+	    wb.write(response.getOutputStream());
+	    wb.close();
+
+	}
 	
 }

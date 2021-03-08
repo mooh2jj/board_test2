@@ -16,6 +16,9 @@ function selChange() {
 	 location.href="list.do?nowPage=${paging.nowPage}&cntPerPage="+sel;
 }
 
+function excelDownF() {
+	 location.href="excelDown.do";
+}
 
 </script> 
 </head>
@@ -38,7 +41,7 @@ function selChange() {
 		<!-- <input type="text" name="keyword" /> -->
 		<input type="submit" value="조회"/>
 	</form>	
-	
+	<div><button type="button" onclick="excelDownF();">엑셀출력</div>
  	<div style="float: right;">
 		<select id="cntPerPage" name="sel" onchange="selChange()">
 			<option value="10"
@@ -79,7 +82,7 @@ function selChange() {
 		</tr>
 		</c:forEach>
 	</table>
-	
+
 	<div style="display: block; text-align: center;">		
 		<c:if test="${paging.startPage != 1 }">
 			<a href="${contextPath}/board/list.do?nowPage=${paging.startPage - 1 }&cntPerPage=${paging.cntPerPage}">&lt;</a> <!-- < -->

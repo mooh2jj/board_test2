@@ -5,6 +5,11 @@
 
 <mapper namespace="boardmapper">
 
+	<select id="selectAll2" resultType="com.myspring.dto.BoardDto">
+		select * from tbl_board
+		order by REGDATE ASC
+	</select>
+
 	<select id="selectAll" resultType="com.myspring.dto.BoardDto">
 
 		<include refid="pagingHeader"></include>
@@ -94,7 +99,8 @@
 	<!-- 페이징 sql -->
 
 	<select id="countBoard" resultType="int">
-		SELECT COUNT(*) FROM TBL_BOARD
+		SELECT COUNT(*) FROM TBL_BOARD b, t_member m 
+		WHERE b.writer = m.id
 	</select>
 
 	<sql id="pagingHeader">

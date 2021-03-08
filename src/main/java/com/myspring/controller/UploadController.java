@@ -2,6 +2,7 @@ package com.myspring.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.annotation.Resource;
@@ -9,15 +10,14 @@ import javax.annotation.Resource;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +33,27 @@ public class UploadController {
 
 	@Resource(name = "uploadPath")
 	String uploadPath;
+
+	// http://localhost:8084/upload/uploadForm (test용)
+	@RequestMapping(value = "uploadForm", method = RequestMethod.GET)
+	public String uploadForm() {
+			return "uploadForm";
+	}
+	
+	@RequestMapping(value = "uploadFileSet", method = RequestMethod.POST)
+	public String uploadFileSet(MultipartFile file, Model model) throws Exception {
+		
+		String savedName =  file.getOriginalFilename();
+		logger.info("originalName: " + savedName);
+		logger.info("size:" + file.getSize());
+		logger.info("contentType:" + file.getContentType());
+		
+		savedName = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
+		model.addAttribute("savedName", savedName);
+		
+		return "uploadResult";
+	}
+	
 
 //	@RequestMapping(value = "uploadAjax", method = RequestMethod.GET)
 //	public void uploadAjax() {
