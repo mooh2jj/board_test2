@@ -1,5 +1,8 @@
 package com.myspring.controller;
 
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +16,8 @@ import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
@@ -29,19 +34,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.myspring.dto.BoardDto;
+import com.myspring.dto.BoardDTO;
 import com.myspring.dto.PagingVO;
 
 @Controller
 @RequestMapping("/board/*") // */board/* 앞에 * 빼야!
 public class BoardController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	private static final Logger log = LoggerFactory.getLogger(BoardController.class);
 	
 	@Autowired
 	private SqlSession sqlSession;
 	
-	@RequestMapping("/list")
+	@RequestMapping("/list.do")
 	public String list(PagingVO pvo, Model model
 			, @RequestParam(value="nowPage", required=false, defaultValue = "1")String nowPage
 			, @RequestParam(value="cntPerPage", required=false)String cntPerPage
@@ -75,7 +80,7 @@ public class BoardController {
 		// 단순히 pvo로 put한 map으로는 sql오류가 남! 각각 따로 start, end를 넣어주어야 됨!
 		parammap.put("searchOption", searchOption);
 		parammap.put("keyword", keyword);
-		List<BoardDto> selectAll = sqlSession.selectList("boardmapper.selectAll", parammap);
+		List<BoardDTO> selectAll = sqlSession.selectList("boardmapper.selectAll", parammap);
 		
 		System.out.println("pvo : "+pvo);
 		model.addAttribute("paging", pvo);
@@ -88,13 +93,13 @@ public class BoardController {
 	
 	@RequestMapping("/write.do")
 	public String write() {
-		
+		log.info("write.do start...");
 		return "board/write";
 	}
 	
 	@Transactional
 	@RequestMapping("/insert.do")
-	public String insert(BoardDto dto, HttpSession session) throws Exception {
+	public String insert(BoardDTO dto, HttpSession session) throws Exception {
 //		public String insert(BoardDto dto) {
 		System.out.println("dto: "+dto);
 		
@@ -126,7 +131,7 @@ public class BoardController {
 		
 		sqlSession.update("boardmapper.increaseViewcnt", bno);	// view 볼시, 조회수 증가!
 		
-		BoardDto dto = sqlSession.selectOne("boardmapper.selectView", bno);		//view페이지 데이터 전달 객체 dto 셋팅
+		BoardDTO dto = sqlSession.selectOne("boardmapper.selectView", bno);		//view페이지 데이터 전달 객체 dto 셋팅
 		
 		System.out.println("selectViewOne :"+ dto);
 		
@@ -137,7 +142,7 @@ public class BoardController {
 	
 	
 	@RequestMapping("/update.do")
-	public String update(BoardDto dto) {
+	public String update(BoardDTO dto) {
 		// dto.getbno()는 비효율적! 하나끄집어올려고 다가져오면 로드 부하만 커지는 꼴!
 		System.out.println("upadte_dto :"+ dto);
 		sqlSession.update("boardmapper.update", dto);
@@ -160,10 +165,13 @@ public class BoardController {
 		sqlSession.delete("boardmapper.deleteFile", fullname);
 	}
 	
+	
+	
+	
 	@RequestMapping("/excelDown.do")
 	public void excelDown(HttpServletResponse response) throws Exception{
 		
-		List<BoardDto> excelList = sqlSession.selectList("selectAll2");
+		List<BoardDTO> excelList = sqlSession.selectList("selectAll2");
 		
 		Workbook wb = new HSSFWorkbook();
 		Sheet sheet = wb.createSheet("게시판");
@@ -223,8 +231,7 @@ public class BoardController {
 	    cell.setCellValue("조회수");
 	    
 	    // 데이터 부분 생성
-
-	    for(BoardDto dto : excelList) {
+	    for(BoardDTO dto : excelList) {
 
 	        row = sheet.createRow(rowNo++);
 
@@ -256,12 +263,50 @@ public class BoardController {
 
 	    // 컨텐츠 타입과 파일명 지정
 	    response.setContentType("ms-vnd/excel");
-	    response.setHeader("Content-Disposition", "attachment;filename=board_excelDown.xls");
+	    // 한글로 지정됨!
+	    response.setHeader("Content-Disposition", "attachment; filename="+ URLEncoder.encode("엑셀_결과물.xls", "UTF-8"));
 
 	    // 엑셀 출력
 	    wb.write(response.getOutputStream());
 	    wb.close();
 
 	}
+	
+	
+    public String cellValue(Cell cell) {
+    	 
+        String value = null;
+        if (cell == null) value = "";
+        else {
+            switch (cell.getCellType()) { //cell 타입에 따른 데이타 저장
+            case Cell.CELL_TYPE_FORMULA:
+                value = cell.getCellFormula();
+                break;
+            case Cell.CELL_TYPE_NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    //you should change this to your application date format
+                    SimpleDateFormat objSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    value = "" + objSimpleDateFormat.format(cell.getDateCellValue());
+                } else {
+                    value = "" + String.format("%.0f", new Double(cell.getNumericCellValue()));
+                }
+                break;
+            case Cell.CELL_TYPE_STRING:
+                value = "" + cell.getStringCellValue();
+                break;
+            case Cell.CELL_TYPE_BLANK:
+                //value=""+cell.getBooleanCellValue();
+                value = "";
+                break;
+            case Cell.CELL_TYPE_ERROR:
+                value = "" + cell.getErrorCellValue();
+                break;
+            default:
+            }
+        }
+ 
+        return value.trim();
+    }
+
 	
 }

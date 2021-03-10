@@ -5,12 +5,14 @@
 
 <mapper namespace="boardmapper">
 
-	<select id="selectAll2" resultType="com.myspring.dto.BoardDto">
-		select * from tbl_board
+	<select id="selectAll2" resultType="com.myspring.dto.BoardDTO">
+		select * 
+		from TBL_BOARD b, t_member m
+		WHERE b.writer = m.id
 		order by REGDATE ASC
 	</select>
 
-	<select id="selectAll" resultType="com.myspring.dto.BoardDto">
+	<select id="selectAll" resultType="com.myspring.dto.BoardDTO">
 
 		<include refid="pagingHeader"></include>
 		select
@@ -72,7 +74,7 @@
 		DELETE FROM tbl_attach WHERE fullname = #{fullname}
 	</delete>
 
-	<select id="selectView" resultType="com.myspring.dto.BoardDto">
+	<select id="selectView" resultType="com.myspring.dto.BoardDTO">
 		select bno, title, content, writer, regdate, viewcnt from TBL_BOARD
 		where 1=1
 		and bno = #{bno}

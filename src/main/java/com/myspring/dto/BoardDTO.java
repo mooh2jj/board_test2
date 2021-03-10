@@ -3,7 +3,7 @@ package com.myspring.dto;
 import java.util.Arrays;
 import java.util.Date;
 
-public class BoardDto {
+public class BoardDTO {
 	
 	private int bno;
 	private String title;

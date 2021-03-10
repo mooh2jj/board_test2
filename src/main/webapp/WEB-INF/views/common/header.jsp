@@ -8,13 +8,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="${contextPath}/resources/css/common.css"  type="text/css">
+<link rel="stylesheet" href="/resources/css/common.css"  type="text/css">
 </head>
 <body>
 <%@ include file="/WEB-INF/views/menu.jsp" %>
 <header class="header_class1">
 	<h3>header</h3>
-	<a href="${contextPath}/board/write.do">글등록하기</a>
+<%-- 	<a href="${contextPath}/board/write.do">글등록하기</a> --%>
 
 </header>
 </body>

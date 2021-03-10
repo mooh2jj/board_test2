@@ -20,14 +20,24 @@ function excelDownF() {
 	 location.href="excelDown.do";
 }
 
+function btnWrite() {
+	 location.href="write.do";
+}
+
+
 </script> 
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+<jsp:include page="../common/header.jsp"></jsp:include>
 <!-- 	
 	<button type="button" id="btnWrite">글쓰기</button>
  -->
  	<h2 align="center">글 목록</h2>
+	<div>
+		<span><button type="button" onclick="btnWrite();">글등록</button></span>
+		<span><button type="button" onclick="excelDownF();">엑셀출력</button></span>
+	
+	</div>
 	
 	<form align="center" name="form11" method="post" action="${contextPath}/board/list.do">
 		<select name="searchOption">
@@ -41,7 +51,6 @@ function excelDownF() {
 		<!-- <input type="text" name="keyword" /> -->
 		<input type="submit" value="조회"/>
 	</form>	
-	<div><button type="button" onclick="excelDownF();">엑셀출력</div>
  	<div style="float: right;">
 		<select id="cntPerPage" name="sel" onchange="selChange()">
 			<option value="10"

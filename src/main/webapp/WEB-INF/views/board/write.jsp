@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>글쓰기창</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <script src="http://code.jquery.com/jquery-2.2.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -228,7 +227,7 @@
 </style>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+	<jsp:include page="../common/header.jsp"></jsp:include>
 	<h2>글 작성</h2>
 
 	<form name="form1" id="form1" action="${contextPath}/board/insert.do">
@@ -256,6 +255,6 @@
 			<button type="reset" id="btnCancle">취소</button>
 		</div>
 	</form>
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 </body>
 </html>
